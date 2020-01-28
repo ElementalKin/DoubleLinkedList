@@ -1,3 +1,4 @@
+#include <iostream>
 #pragma once
 template<typename T>
 class tList
@@ -61,48 +62,78 @@ public:
 template<typename T>
 inline tList<T>::tList()
 {
+	//head = new Node(); this may work but im not 100% sure.
+	head.T = nullptr;
+	head.next = nullptr;
+	head.prev = nullptr;
 }
 
 template<typename T>
 inline tList<T>::tList(const tList & other)
 {
+
 }
 
 template<typename T>
-inline tList & tList<T>::operator=(const tList & rhs)
+inline tList<T> & tList<T>::operator=(const tList & rhs)
 {
 	// TODO: insert return statement here
 }
 
+
+
 template<typename T>
 inline tList<T>::~tList()
 {
+
 }
 
 template<typename T>
 inline void tList<T>::push_front(const T & val)
 {
+	Node n = new Node();
+	n.T = val;
+	n.next = T;
+	head = n;
 }
 
 template<typename T>
 inline void tList<T>::pop_front()
 {
+	if(head != nullptr)
+	{
+		Node n = new Node();
+		n = head;
+		head = n.next;
+		delete n;
+	}
 }
 
 template<typename T>
 inline void tList<T>::push_back(const T & val)
 {
+	Node n = new Node();
+	n.T = val;
+	n.prev = T;
+	tail = n;
 }
 
 template<typename T>
 inline void tList<T>::pop_back()
 {
+	if (tail != nullptr)
+	{
+		Node n = new Node();
+		n = tail;
+		tail = n.prev;
+		delete n;
+	}
 }
 
 template<typename T>
 inline T & tList<T>::front()
 {
-	// TODO: insert return statement here
+	return head;
 }
 
 template<typename T>
@@ -114,18 +145,19 @@ inline const T & tList<T>::front() const
 template<typename T>
 inline T & tList<T>::back()
 {
-	// TODO: insert return statement here
+	return tail;
 }
 
 template<typename T>
 inline const T & tList<T>::back() const
 {
-	// TODO: insert return statement here
+	return 0;
 }
 
 template<typename T>
 inline void tList<T>::remove(const T & val)
 {
+	
 }
 
 template<typename T>
@@ -145,25 +177,25 @@ inline void tList<T>::resize(size_t newSize)
 }
 
 template<typename T>
-inline iterator tList<T>::begin()
+typename inline tList<T>::iterator tList<T>::begin()
 {
 	return iterator();
 }
 
 template<typename T>
-inline const iterator tList<T>::begin() const
+typename inline  const tList<T>::iterator tList<T>::begin() const
 {
 	return iterator();
 }
 
 template<typename T>
-inline iterator tList<T>::end()
+typename inline tList<T>::iterator tList<T>::end()
 {
 	return iterator();
 }
 
 template<typename T>
-inline const iterator tList<T>::end() const
+typename inline  const tList<T>::iterator tList<T>::end() const
 {
 	return iterator();
 }
@@ -171,51 +203,66 @@ inline const iterator tList<T>::end() const
 template<typename T>
 inline tList<T>::iterator::iterator()
 {
+	cur = nullptr;
 }
 
 template<typename T>
 inline tList<T>::iterator::iterator(Node * startNode)
 {
+	cur = startNode;
 }
 
 template<typename T>
 inline bool tList<T>::iterator::operator==(const iterator & rhs) const
 {
+	if(cur == rhs)
+	{
+		return true;
+	}
 	return false;
 }
 
 template<typename T>
 inline bool tList<T>::iterator::operator!=(const iterator & rhs) const
 {
+	if (cur != rhs)
+	{
+		return true;
+	}
 	return false;
 }
 
 template<typename T>
 inline T & tList<T>::iterator::operator*() const
 {
-	// TODO: insert return statement here
+	return *cur;
 }
 
 template<typename T>
-inline iterator & tList<T>::iterator::operator++()
+typename inline tList<T>::iterator & tList<T>::iterator::operator++()
+{
+	cur = cur.next;
+	return *cur;
+}
+
+template<typename T>
+typename inline tList<T>::iterator tList<T>::iterator::operator++(int)
+{
+	cur = cur.next;
+	return *cur.prev;
+}
+
+template<typename T>
+typename inline tList<T>::iterator & tList<T>::iterator::operator--()
 {
 	// TODO: insert return statement here
 }
 
 template<typename T>
-inline iterator tList<T>::iterator::operator++(int)
+typename inline tList<T>::iterator tList<T>::iterator::operator--(int)
 {
 	return iterator();
 }
 
-template<typename T>
-inline iterator & tList<T>::iterator::operator--()
-{
-	// TODO: insert return statement here
-}
 
-template<typename T>
-inline iterator tList<T>::iterator::operator--(int)
-{
-	return iterator();
-}
+
