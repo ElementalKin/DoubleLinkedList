@@ -255,13 +255,15 @@ typename inline tList<T>::iterator tList<T>::iterator::operator++(int)
 template<typename T>
 typename inline tList<T>::iterator & tList<T>::iterator::operator--()
 {
-	// TODO: insert return statement here
+	cur = cur.prev;
+	return *cur;
 }
 
 template<typename T>
 typename inline tList<T>::iterator tList<T>::iterator::operator--(int)
 {
-	return iterator();
+	cur = cur.prev;
+	return *cur.next;
 }
 
 
