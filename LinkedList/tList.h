@@ -64,10 +64,7 @@ public:
 template<typename T>
 inline tList<T>::tList()
 {
-	//head = new Node(); this may work but im not 100% sure.
-	head.T = nullptr;
-	head.next = nullptr;
-	head.prev = nullptr;
+	head = nullptr;
 }
 
 template<typename T>
@@ -93,9 +90,9 @@ inline tList<T>::~tList()
 template<typename T>
 inline void tList<T>::push_front(const T & val)
 {
-	Node n = new Node();
-	n.T = val;
-	n.next = T;
+	Node* n = new Node();
+	n->data = val;
+	n->next = head;
 	head = n;
 }
 
@@ -135,7 +132,7 @@ inline void tList<T>::pop_back()
 template<typename T>
 inline T & tList<T>::front()
 {
-	return head;
+	return head->data;
 }
 
 template<typename T>
@@ -147,7 +144,7 @@ inline const T & tList<T>::front() const
 template<typename T>
 inline T & tList<T>::back()
 {
-	return tail;
+	return tail->data;
 }
 
 template<typename T>
@@ -159,16 +156,18 @@ inline const T & tList<T>::back() const
 template<typename T>
 inline void tList<T>::remove(const T & val)
 {
+	Node nodeToDelete = new Node();
 	iterator n = new iterator();
-	n::cur = head;
+	n->cur = head;
 	while(n::cur != nullptr)
 	{
 		if(n::cur == val)
 		{
-			n::cur::prev::prev = n::cur::next;
-			n::cur::next::next = n::cur::prev;
-			n::cur = n::cur::next;
-			delete n::cur::prev;
+			n->cur->prev->prev = n->cur->next;
+			n->cur->next->next = n->cur->prev;
+			n->cur = n->cur->next;
+			nodeToDelete = n->cur;
+			delete nodeToDelete;
 		}
 
 	}

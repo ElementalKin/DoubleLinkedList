@@ -1,2 +1,12 @@
 ﻿  Source.cpp
-  LinkedList.vcxproj -> C:\Users\s199102\source\repos\LinkedList\Debug\LinkedList.exe
+c:\users\s199102\source\repos\linkedlist\linkedlist\tlist.h(104): error C2440: 'initializing': cannot convert from 'tList<int>::Node *' to 'tList<int>::Node'
+  c:\users\s199102\source\repos\linkedlist\linkedlist\tlist.h(104): note: No constructor could take the source type, or constructor overload resolution was ambiguous
+  c:\users\s199102\source\repos\linkedlist\linkedlist\tlist.h(101): note: while compiling class template member function 'void tList<int>::pop_front(void)'
+  c:\users\s199102\source\repos\linkedlist\linkedlist\source.cpp(8): note: see reference to function template instantiation 'void tList<int>::pop_front(void)' being compiled
+  c:\users\s199102\source\repos\linkedlist\linkedlist\source.cpp(5): note: see reference to class template instantiation 'tList<int>' being compiled
+c:\users\s199102\source\repos\linkedlist\linkedlist\tlist.h(105): error C2679: binary '=': no operator found which takes a right-hand operand of type 'tList<int>::Node *' (or there is no acceptable conversion)
+  c:\users\s199102\source\repos\linkedlist\linkedlist\tlist.h(12): note: could be 'tList<int>::Node &tList<int>::Node::operator =(tList<int>::Node &&)'
+  c:\users\s199102\source\repos\linkedlist\linkedlist\tlist.h(12): note: or       'tList<int>::Node &tList<int>::Node::operator =(const tList<int>::Node &)'
+  c:\users\s199102\source\repos\linkedlist\linkedlist\tlist.h(105): note: while trying to match the argument list '(tList<int>::Node, tList<int>::Node *)'
+c:\users\s199102\source\repos\linkedlist\linkedlist\tlist.h(107): error C2440: 'delete': cannot convert from 'tList<int>::Node' to 'void*'
+  c:\users\s199102\source\repos\linkedlist\linkedlist\tlist.h(107): note: No user-defined-conversion operator available that can perform this conversion, or the operator cannot be called
