@@ -59,6 +59,16 @@ public:
 	const iterator begin() const;                   // returns a const iterator pointing to the first element
 	iterator end();                                 // returns an iterator pointing to one past the last element
 	const iterator end() const;                     // returns a const iterator pointing to one past the last element
+
+	class customSorter
+	{
+	public:
+		void sort(iterator n, iterator m, tList sorting, tList placeHolder);
+		void sortAscending(const tList& sorting);
+		void sortDescending(const tList& sorting);
+
+
+	};
 };
 
 template<typename T>
@@ -101,9 +111,9 @@ inline void tList<T>::pop_front()
 {
 	if(head != nullptr)
 	{
-		Node n = new Node();
+		Node* n = new Node();
 		n = head;
-		head = n.next;
+		head = n->next;
 		delete n;
 	}
 }
@@ -122,9 +132,9 @@ inline void tList<T>::pop_back()
 {
 	if (tail != nullptr)
 	{
-		Node n = new Node();
+		Node* n = new Node();
 		n = tail;
-		tail = n.prev;
+		tail = n->prev;
 		delete n;
 	}
 }
@@ -294,5 +304,42 @@ typename inline tList<T>::iterator tList<T>::iterator::operator--(int)
 	return *cur.next;
 }
 
+template<typename T>
+inline void tList<T>::customSorter::sort(iterator n, iterator m, tList sorting, tList placeHolder)
+{
+	while (m != sorting.tail)
+	{
+		if (n > m.next)
+		{
+			n = m.next;
+		}
+		else
+		{
+			m = m.next;
+		}
+	}
+	if(placeHolder.head == nullptr)
+	{
+		placeHolder.head(m.cur);
+	}
+	placeHolder.push_front(m.cur);
+}
 
+template<typename T>
+inline void tList<T>::customSorter::sortAscending(const tList & sorting)
+{
+	tList placeHolder = new tList();
+	iterator n = new iterator();
+	iterator m = new iterator();
+	n = sorting.head;
+	m = sorting.head;
+	while(sorting.tail != nullptr)
+	{
+		sorting(n, m, sorting, placeHolder);
+	}
+}
 
+template<typename T>
+inline void tList<T>::customSorter::sortDescending(const tList & sorting)
+{
+}
