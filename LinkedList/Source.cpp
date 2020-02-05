@@ -13,10 +13,19 @@ int main()
 	h.push_front(6);
 	h.push_front(7);
 	h.push_front(8);
+	h.push_front(9);
 	std::cout << h.front() << std::endl;
+	h.remove(e);
+	std::cout << h.front() << std::endl;
+	h.sortAscending();
+	
 	while (true)
 	{
 		
 	}
 	return 0;
+}
+void printTList(tList<int> h)
+{
+	
 }

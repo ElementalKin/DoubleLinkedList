@@ -37,6 +37,10 @@ public:
 	void resize(size_t newSize);    // Resizes the linked list to contain the given number of elements
 									// New elements are default-initialized
 
+	void sort(Node* n, Node* m, tList* sorting, tList* placeHolder);
+	void sortAscending();
+	void sortDescending();
+
 	class iterator
 	{
 		Node * cur;                                 // current node being operated upon
@@ -59,16 +63,6 @@ public:
 	const iterator begin() const;                   // returns a const iterator pointing to the first element
 	iterator end();                                 // returns an iterator pointing to one past the last element
 	const iterator end() const;                     // returns a const iterator pointing to one past the last element
-
-	class customSorter
-	{
-	public:
-		void sort(iterator n, iterator m, tList sorting, tList placeHolder);
-		void sortAscending(const tList& sorting);
-		void sortDescending(const tList& sorting);
-
-
-	};
 };
 
 template<typename T>
@@ -100,10 +94,21 @@ inline tList<T>::~tList()
 template<typename T>
 inline void tList<T>::push_front(const T & val)
 {
-	Node* n = new Node();
-	n->data = val;
-	n->next = head;
-	head = n;
+	if (tail == nullptr)
+	{
+		Node* n = new Node();
+		n->data = val;
+		n->next = head;
+		head = n;
+		tail = n->next;
+	}
+	else
+	{
+		Node* n = new Node();
+		n->data = val;
+		n->next = head;
+		head = n;
+	}
 }
 
 template<typename T>
@@ -121,7 +126,7 @@ inline void tList<T>::pop_front()
 template<typename T>
 inline void tList<T>::push_back(const T & val)
 {
-	Node n = new Node();
+	Node* n = new Node();
 	n.T = val;
 	n.prev = T;
 	tail = n;
@@ -166,21 +171,22 @@ inline const T & tList<T>::back() const
 template<typename T>
 inline void tList<T>::remove(const T & val)
 {
-	Node nodeToDelete = new Node();
-	iterator n = new iterator();
-	n->cur = head;
-	while(n::cur != nullptr)
+	Node* n = new Node();
+	n = head;
+	while(n != nullptr)
 	{
-		if(n::cur == val)
+		if(n->data == val)
 		{
-			n->cur->prev->prev = n->cur->next;
-			n->cur->next->next = n->cur->prev;
-			n->cur = n->cur->next;
-			nodeToDelete = n->cur;
-			delete nodeToDelete;
+			n->next->prev = n->prev;
+			n->prev->next = n->next;
+			n = n->next;
+			Node* d = new Node();
+			d = n;
+			delete d;
 		}
 
 	}
+	delete n;
 }
 
 template<typename T>
@@ -305,41 +311,42 @@ typename inline tList<T>::iterator tList<T>::iterator::operator--(int)
 }
 
 template<typename T>
-inline void tList<T>::customSorter::sort(iterator n, iterator m, tList sorting, tList placeHolder)
+inline void tList<T>::sort(Node* n, Node* m, tList* sorting, tList* placeHolder)
 {
-	while (m != sorting.tail)
+	while (m != sorting->tail)
 	{
-		if (n > m.next)
+		if (n > m->next)
 		{
-			n = m.next;
+			n = m->next;
 		}
 		else
 		{
-			m = m.next;
+			m = m->next;
 		}
 	}
-	if(placeHolder.head == nullptr)
+	if(placeHolder->head == nullptr)
 	{
-		placeHolder.head(m.cur);
+		placeHolder->head = m;
 	}
-	placeHolder.push_front(m.cur);
+	placeHolder->push_front(m->data);
 }
 
 template<typename T>
-inline void tList<T>::customSorter::sortAscending(const tList & sorting)
+inline void tList<T>::sortAscending()
 {
-	tList placeHolder = new tList();
-	iterator n = new iterator();
-	iterator m = new iterator();
-	n = sorting.head;
-	m = sorting.head;
-	while(sorting.tail != nullptr)
+	tList<int>* placeHolder = new tList();
+	Node* n = new Node();
+	Node* m = new Node();
+	n = head;
+	m = head;
+	while(tail != nullptr)
 	{
-		sorting(n, m, sorting, placeHolder);
+		sort(n, m, this, placeHolder);
 	}
+	delete n, m;
 }
 
 template<typename T>
-inline void tList<T>::customSorter::sortDescending(const tList & sorting)
+inline void tList<T>::sortDescending()
 {
 }
