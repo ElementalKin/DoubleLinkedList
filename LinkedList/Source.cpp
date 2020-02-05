@@ -2,6 +2,7 @@
 #include <iostream>
 int main()
 {
+	//currently can't interact with the linked lists functions need to work on that.
 	tList<int> h;
 	int e = 4;
 	h.push_front(0);
