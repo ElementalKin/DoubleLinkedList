@@ -38,7 +38,9 @@ public:
 	void resize(size_t newSize);    // Resizes the linked list to contain the given number of elements
 									// New elements are default-initialized
 
+	//I would have made it so that sort would send back the Data but making one for each seemed faster then trying to do that and since im in a rush im doing this.
 	void sort(tList* sorting, tList* placeHolder);
+	void sort2(tList* sorting, tList* placeHolder);
 	void sortAscending();
 	void sortDescending();
 
@@ -75,16 +77,52 @@ inline tList<T>::tList()
 template<typename T>
 inline tList<T>::tList(const tList & other)
 {
-
+	if (other.head == nullptr) 
+	{
+		head = tail = nullptr;                       // if list is other is empty, empty this.
+	}
+	else
+	{
+		head = new Node(*other.head);      // set the head and copy data.
+		Node* otherTemp = other.head->next;
+		Node* temp = head;
+		while (otherTemp != nullptr)
+		{
+			temp->next = new Node(*otherTemp); //copy the data into the next node.
+			temp = temp->next;                                      // temp refers to last element of list.
+			otherTemp = otherTemp->next;                            // step one forward.
+		}
+		tail = temp;
+	}
 }
 
 template<typename T>
 inline tList<T> & tList<T>::operator=(const tList & rhs)
 {
-	
+	if (this == &rhs)
+	{
+		return *this; //checks if they are the same array.
+	}
+	if (rhs.head == nullptr)
+	{
+		head = tail = nullptr;                       // if list other is empty, empty this.
+	}
+	else 
+	{
+		push_front(rhs.head->data);
+		Node* n = rhs.head->next;
+		Node* temp = head;
+		while (n != nullptr)
+		{
+			temp->next = n; //copy the data into the next node.
+			temp = temp->next;                              // temp refers to last element of list.
+			n = n->next;                            // step one forward.
+		}
+		tail = temp;
+	}
+
+	return *this;
 }
-
-
 
 template<typename T>
 inline tList<T>::~tList()
@@ -125,6 +163,7 @@ inline void tList<T>::pop_front()
 		Node* n = new Node();
 		n = head;
 		head = n->next;
+		head->prev = nullptr;
 		delete n;
 	}
 }
@@ -132,10 +171,26 @@ inline void tList<T>::pop_front()
 template<typename T>
 inline void tList<T>::push_back(const T & val)
 {
-	Node* n = new Node();
-	n.T = val;
-	n.prev = T;
-	tail = n;
+	if (head == nullptr && tail != nullptr)
+	{
+		Node* n = new Node();
+		n->data = val;
+		n->prev = tail;
+		n->prev->next = n;
+		tail = n;
+		head = n->prev;
+
+	}
+	else
+	{
+		Node* n = new Node();
+		n->data = val;
+		n->prev = tail;
+		if (tail != nullptr) {
+			n->prev->next = n;
+		}
+		tail = n;
+	}
 }
 
 template<typename T>
@@ -146,7 +201,8 @@ inline void tList<T>::pop_back()
 		Node* n = new Node();
 		n = tail;
 		tail = n->prev;
-		n->prev->next = nullptr;
+		n->prev->prev->next = tail;
+		tail->next = nullptr;
 		delete n;
 	}
 }
@@ -158,6 +214,7 @@ inline void tList<T>::Display()
 	Node *disp = head;
 	if (head == nullptr)
 	{
+		std::cout << "empty\n";
 		return;
 	}
 	while (disp != nullptr)
@@ -169,12 +226,13 @@ inline void tList<T>::Display()
 		}
 		disp = disp->next;
 	}
+	std::cout << "\n";
 }
 
 template<typename T>
 inline T & tList<T>::front()
 {
-	return head;
+		return head->data;
 }
 
 template<typename T>
@@ -187,9 +245,8 @@ inline const T & tList<T>::front() const
 template<typename T>
 inline T & tList<T>::back()
 {
-	return tail;
+	return tail->data;
 }
-
 template<typename T>
 inline const T & tList<T>::back() const
 {
@@ -286,6 +343,26 @@ inline void tList<T>::clear()
 template<typename T>
 inline void tList<T>::resize(size_t newSize)
 {
+	Node* n = head;
+	int s = 0;
+	while (n != tail)
+	{
+		n = n->next;
+		s++;
+	}
+	if (newSize >= s) {
+		for (int i = 0; i < newSize; i++)
+		{
+			push_back(0);
+		}
+	}
+	else
+	{
+		for (int i = 0; i < (s-newSize); i++)
+		{
+			pop_back();
+		}
+	}
 }
 
 template<typename T>
@@ -396,43 +473,123 @@ typename inline tList<T>::iterator tList<T>::iterator::operator--(int)
 template<typename T>
 inline void tList<T>::sort(tList* sorting, tList* placeHolder)
 {
+	if(head == nullptr)
+	{
+		return;
+	}
 	Node* n = sorting->head;
 	Node* m = sorting->head;
-	while (m != sorting->tail)
+	if (head->next == tail)
+	{
+		if (head->data > tail->data)
+		{
+			placeHolder->push_front(head->data);
+			placeHolder->push_front(tail->data);
+			clear();
+		}
+		else
+		{
+			placeHolder->push_front(tail->data);
+			placeHolder->push_front(head->data);
+			clear();
+		}
+		return;
+	}
+	while (m != tail)
 	{
 		m = m->next;
 		if(n->data < m->data)
 		{
 			n = m;
 		}
+
 	}
-	if(placeHolder->head == nullptr)
-	{
-		placeHolder->head = m;
-	}
-	placeHolder->push_front(m->data);
+
 
 
 	if(n == tail)
 	{
-		pop_back();
 		placeHolder->push_front(n->data);
+		pop_back();
 	}
 	else if(n == head)
 	{
-		pop_front();
 		placeHolder->push_front(n->data);
+		pop_front();
 	}
 	else
 	{
+		placeHolder->push_front(n->data);
 		m = n->next;
-		m->prev = n->prev;
-		n->prev->next = m;
+		n->next->prev = n->prev;
+		n->next->prev->next = n->next;
 	}
 
 
-	sorting->Display();
 	if(sorting->empty())
+	{
+		delete n, m;
+	}
+
+}
+
+template<typename T>
+inline void tList<T>::sort2(tList* sorting, tList* placeHolder)
+{
+	if (head == nullptr)
+	{
+		return;
+	}
+	Node* n = sorting->head;
+	Node* m = sorting->head;
+	if (head->next == tail)
+	{
+		if (head->data > tail->data)
+		{
+			placeHolder->push_back(head->data);
+			placeHolder->push_back(tail->data);
+			clear();
+		}
+		else
+		{
+			placeHolder->push_back(tail->data);
+			placeHolder->push_back(head->data);
+			clear();
+		}
+		return;
+	}
+	while (m != tail)
+	{
+		m = m->next;
+		if (n->data < m->data)
+		{
+			n = m;
+		}
+
+	}
+
+
+
+	if (n == tail)
+	{
+		placeHolder->push_back(n->data);
+		pop_back();
+	}
+	else if (n == head)
+	{
+		placeHolder->push_back(n->data);
+		pop_front();
+	}
+	else
+	{
+		placeHolder->push_back(n->data);
+		m = n->next;
+		n->next->prev = n->prev;
+		n->next->prev->next = n->next;
+	}
+
+
+	if (sorting->empty())
 	{
 		delete n, m;
 	}
@@ -450,14 +607,29 @@ inline void tList<T>::sortAscending()
 		n = n->next;
 		i++;
 	}
-	while(i > 0)
+	while(i >= 0)
 	{
 		sort(this, placeHolder);
 		i--;
 	}
+	*this = *placeHolder;
 }
 
 template<typename T>
 inline void tList<T>::sortDescending()
 {
+	int i = 0;
+	tList<int>* placeHolder = new tList();
+	Node* n = head;
+	while (n != tail)
+	{
+		n = n->next;
+		i++;
+	}
+	while (i >= 0)
+	{
+		sort2(this, placeHolder);
+		i--;
+	}
+	*this = *placeHolder;
 }
